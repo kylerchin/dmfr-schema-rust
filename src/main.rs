@@ -1173,7 +1173,7 @@ impl Operator {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct OperatorAssociatedFeedsItem {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub feed_onestop_id: Option<serde_json::Value>,
+    pub feed_onestop_id: Option<String>,
     #[doc = "ID from the "]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub gtfs_agency_id: Option<String>,
@@ -1522,6 +1522,8 @@ pub enum SpdxLicenseIds {
     CcBySa30Igo,
     #[serde(rename = "CC-BY-SA-4.0")]
     CcBySa40,
+    #[serde(rename = "CC-BY-SA-AR")]
+    CcBySaAr,
     #[serde(rename = "CC-PDDC")]
     CcPddc,
     #[serde(rename = "CC0-1.0")]
@@ -2014,6 +2016,8 @@ pub enum SpdxLicenseIds {
     OcctPl,
     #[serde(rename = "OCLC-2.0")]
     Oclc20,
+    #[serde(rename = "OdbL")]
+    ODbL,
     #[serde(rename = "ODbL-1.0")]
     ODbL10,
     #[serde(rename = "ODC-By-1.0")]
@@ -2453,6 +2457,7 @@ impl ToString for SpdxLicenseIds {
             Self::CcBySa30De => "CC-BY-SA-3.0-DE".to_string(),
             Self::CcBySa30Igo => "CC-BY-SA-3.0-IGO".to_string(),
             Self::CcBySa40 => "CC-BY-SA-4.0".to_string(),
+            Self::CcBySaAr => "CC-BY-SA-AR".to_string(),
             Self::CcPddc => "CC-PDDC".to_string(),
             Self::Cc010 => "CC0-1.0".to_string(),
             Self::Cddl10 => "CDDL-1.0".to_string(),
@@ -2715,6 +2720,7 @@ impl ToString for SpdxLicenseIds {
             Self::OUda10 => "O-UDA-1.0".to_string(),
             Self::OcctPl => "OCCT-PL".to_string(),
             Self::Oclc20 => "OCLC-2.0".to_string(),
+            Self::ODbL => "ODbL".to_string(),
             Self::ODbL10 => "ODbL-1.0".to_string(),
             Self::OdcBy10 => "ODC-By-1.0".to_string(),
             Self::Offis => "OFFIS".to_string(),
@@ -3281,6 +3287,7 @@ impl std::str::FromStr for SpdxLicenseIds {
             "O-UDA-1.0" => Ok(Self::OUda10),
             "OCCT-PL" => Ok(Self::OcctPl),
             "OCLC-2.0" => Ok(Self::Oclc20),
+            "ODbL" => Ok(Self::ODbL),
             "ODbL-1.0" => Ok(Self::ODbL10),
             "ODC-By-1.0" => Ok(Self::OdcBy10),
             "OFFIS" => Ok(Self::Offis),
@@ -4239,7 +4246,7 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct OperatorAssociatedFeedsItem {
-        feed_onestop_id: Result<Option<serde_json::Value>, String>,
+        feed_onestop_id: Result<Option<String>, String>,
         gtfs_agency_id: Result<Option<String>, String>,
     }
     impl Default for OperatorAssociatedFeedsItem {
@@ -4253,12 +4260,12 @@ pub mod builder {
     impl OperatorAssociatedFeedsItem {
         pub fn feed_onestop_id<T>(mut self, value: T) -> Self
         where
-            T: std::convert::TryInto<Option<serde_json::Value>>,
+            T: std::convert::TryInto<Option<String>>,
             T::Error: std::fmt::Display,
         {
-            self.feed_onestop_id = value
+            self.gtfs_agency_id = value
                 .try_into()
-                .map_err(|e| format!("error converting supplied value for feed_onestop_id: {}", e));
+                .map_err(|e| format!("error converting supplied value for gtfs_agency_id: {}", e));
             self
         }
         pub fn gtfs_agency_id<T>(mut self, value: T) -> Self
